@@ -8,6 +8,7 @@ const MongoStore = require('connect-mongo');
 const session = require('express-session');
 
 const connectDB = require('./server/config/db');
+const {isAciveRoute} = require('./server/helpers/routeHelpers');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -36,6 +37,8 @@ app.use(express.static('public'));
 app.use(expressLayout);
 app.set('layout', './layouts/main');
 app.set('view engine', 'ejs');
+
+app.locals.isActiveRoute = isActiveRoute;
 
 app.use('/', require('./server/routes/main'));
 app.use('/', require('./server/routes/admin'));

@@ -74,7 +74,7 @@ router.get('/post/:id', async (req, res) => {
     
     const data = await Post.findById({_id: slug});
     res.render('post', { 
-     locals, data
+     locals, data, currentRoute: `/post/${slug}`
     });
   } catch (error) {
     console.log(error);
@@ -103,17 +103,22 @@ router.post('/search', async (req, res) => {
     ]
   })
 
-    res.render("search", { locals, data });
+    res.render("search", { locals, data, currentRoute: '/' });
   } catch (error) {
     console.log(error);
   }
 });
 
-
-
+/**
+ * GET /
+ * About
+*/
 router.get('/about', (req, res) => {
-  res.render('about');
+  res.render('about', {
+    currentRoute: '/about'
+  });
 });
+
 
 // function insertPostData () {
 //   Post.insertMany([

@@ -3,9 +3,9 @@
 
   <nav class="header__nav">
     <ul>
-      <li><a href="/">Home</a></li>
-      <li><a href="/about">About</a></li>
-      <li><a href="/contact">Contact</a></li>
+      <li><a href="/"  class="<%= isActiveRoute('/', isActiveRoute) %>">Home</a></li>
+      <li><a href="/about" class="<%= isActiveRoute('/about', isActiveRoute) %>">About</a></li>
+      <li><a href="/contact" class="<%= isActiveRoute('/contact', isActiveRoute) %>">Contact</a></li>
     </ul>
   </nav>
 

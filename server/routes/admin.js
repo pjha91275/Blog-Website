@@ -152,7 +152,7 @@ router.post('/add-post', authMiddleware, async (req, res) => {
 
 /**
  * GET /
- * Admin - Create New Post
+ * Admin - Edit Post
 */
 router.get('/edit-post/:id', authMiddleware, async (req, res) => {
   try {
@@ -176,11 +176,9 @@ router.get('/edit-post/:id', authMiddleware, async (req, res) => {
 
 });
 
-
-
 /**
  * PUT /
- * Admin - Create New Post
+ * Admin - Edit Post
 */
 router.put('/edit-post/:id', authMiddleware, async (req, res) => {
   try {
@@ -227,7 +225,7 @@ router.post('/register', async (req, res) => {
 });
 
 /**
- * DELETE /
+ * DELETE /   
  * Admin - Delete Post
 */
 router.delete('/delete-post/:id', authMiddleware, async (req, res) => {
@@ -238,6 +236,18 @@ router.delete('/delete-post/:id', authMiddleware, async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+
+});
+
+/**
+ * DELETE /   
+ * Admin Logout
+*/
+router.delete('/logout', authMiddleware, async (req, res) => {
+  res.clearCookie('token');
+ // res.json({ message: 'Logout successful.' });
+  res.redirect('/'); 
+
 
 });
 
