@@ -57,7 +57,6 @@ router.get('/admin', async (req, res) => {
 router.post('/admin', async (req, res) => {
   try {
     const { username, password } = req.body;
-    console.log(username, password);
     const user = await User.findOne( { username } );
 
     if(!user) {
@@ -240,15 +239,13 @@ router.delete('/delete-post/:id', authMiddleware, async (req, res) => {
 });
 
 /**
- * DELETE /   
+ * GET /   
  * Admin Logout
 */
-router.delete('/logout', authMiddleware, async (req, res) => {
+router.get('/logout', authMiddleware, async (req, res) => {
   res.clearCookie('token');
  // res.json({ message: 'Logout successful.' });
   res.redirect('/'); 
-
-
 });
 
 
