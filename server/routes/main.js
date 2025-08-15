@@ -119,6 +119,12 @@ router.get('/about', (req, res) => {
   });
 });
 
+router.get('/contact', (req, res) => {
+  res.render('contact', {
+      currentRoute: '/contact'
+    });
+
+});
 
 // function insertPostData () {
 //   Post.insertMany([
