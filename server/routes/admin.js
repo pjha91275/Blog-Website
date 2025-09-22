@@ -47,7 +47,7 @@ router.get('/admin', async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-});
+});                 
 
 /**
  * POST /
