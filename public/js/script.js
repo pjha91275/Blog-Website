@@ -20,88 +20,75 @@ document.addEventListener('DOMContentLoaded', function(){
     this.setAttribute('aria-expanded', 'false');
   });
 
-
-  // ===== Hero image carousel (rotates src every 3 seconds using recursive setTimeout) =====
-  // Behavior:
-  // - Finds the <img class="hero-image"> on the page
-  // - Attempts to preload a list of candidate hero images from /img/
-  // - Uses only the images that successfully load
-  // - Rotates them every 3000ms (3s) using setTimeout recursion
-  (function heroCarousel() {
+  // --- custom carousel ---
+  (function() {
     const hero = document.querySelector('.hero-image');
-    if (!hero) return; // nothing to do if image isn't present
-
-    const basePath = '/img/';
-
-    // Customize this list to match your actual filenames in public/img/
-    // Order here is the rotation order. Keep the existing default filename as a fallback.
-    const candidates = [
-      'hero-image1.png',
-      'hero-image2.png',
-      'hero-image3.png',
-      'hero-image.webp' // fallback / existing image
+    if (!hero) return;
+    const base = '/img/';
+    const slides = [
+      'hero-image1.jpeg',
+      'hero-image2.jpeg',
+      'hero-image3.jpeg',
+      'hero-image.webp'
     ];
+    let i = 0, t = null, delay = 3000;
 
-    const available = []; // filenames that successfully preload
-    let idx = 0;
-    let timeoutId = null;
+    const container = (() => {
+      const p = hero.parentElement;
+      if (p && p.classList.contains('hero-container')) return p;
+      const c = document.createElement('div');
+      c.className = 'hero-container';
+      c.style.position = 'relative';
+      p.replaceChild(c, hero);
+      c.appendChild(hero);
+      return c;
+    })();
 
-    function preloadList(list, done) {
-      let remaining = list.length;
-      if (remaining === 0) return done();
+    const mkBtn = dir => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = `hero-arrow hero-arrow-${dir}`;
+      btn.innerHTML = dir === 'left' ? '&#x2039;' : '&#x203A;';
+      btn.style.position = 'absolute';
+      btn.style.top = '50%';
+      btn.style.transform = 'translateY(-50%)';
+      btn.style.zIndex = '999';
+      return btn;
+    };
 
-      list.forEach(name => {
-        const img = new Image();
-        img.src = basePath + name;
-        img.onload = function() {
-          available.push(name);
-          remaining--;
-          if (remaining === 0) done();
-        };
-        img.onerror = function() {
-          // ignore missing/broken images
-          remaining--;
-          if (remaining === 0) done();
-        };
-      });
+    if (!container.querySelector('.hero-arrow-left')) {
+      const prev = mkBtn('left'), next = mkBtn('right');
+      prev.addEventListener('click', () => { show(i-1); restart(); });
+      next.addEventListener('click', () => { show(i+1); restart(); });
+      container.appendChild(prev); container.appendChild(next);
     }
 
-    function startRotation() {
-      if (available.length <= 1) {
-        // nothing to rotate; if one image available, ensure hero uses it
-        if (available.length === 1) hero.src = basePath + available[0];
-        return;
-      }
+    window.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft') { show(i-1); restart(); }
+      if (e.key === 'ArrowRight') { show(i+1); restart(); }
+    });
 
-      // Set initial image if not already set to one of the available list
-      const currentSrc = hero.getAttribute('src') || '';
-      const currentName = currentSrc.split('/').pop();
-      const startIndex = available.indexOf(currentName);
-      idx = startIndex >= 0 ? startIndex : 0;
-      hero.src = basePath + available[idx];
+    container.addEventListener('mousedown', () => { if (t) { clearTimeout(t); t = null; } });
+    window.addEventListener('mouseup', () => schedule());
 
-      function tick() {
-        idx = (idx + 1) % available.length;
-        hero.src = basePath + available[idx];
-        timeoutId = setTimeout(tick, 3000);
-      }
-
-      // start the loop
-      timeoutId = setTimeout(tick, 3000);
-
-      // Optional: pause on hover so users can inspect the image
-      hero.addEventListener('mouseenter', function() {
-        if (timeoutId) {
-          clearTimeout(timeoutId);
-          timeoutId = null;
-        }
-      });
-      hero.addEventListener('mouseleave', function() {
-        if (!timeoutId) timeoutId = setTimeout(tick, 3000);
-      });
+    container.addEventListener('touchstart', () => { if (t) { clearTimeout(t); t = null; } }, { passive: true });
+    window.addEventListener('touchend', () => schedule());
+    
+    function show(n) {
+      if (!slides.length) return;
+      i = ((n % slides.length) + slides.length) % slides.length;
+      hero.src = base + slides[i];
     }
 
-    preloadList(candidates, startRotation);
+    function tick() { show(i+1); schedule(); }
+    function schedule(){ if (t) clearTimeout(t); t = setTimeout(tick, delay); }
+    function restart(){ if (t) clearTimeout(t); t = setTimeout(tick, delay); }
+
+    const current = (hero.getAttribute('src')||'').split('/').pop();
+    const start = slides.indexOf(current);
+    i = start >= 0 ? start : 0;
+    show(i);
+    restart();
   })();
 
 });

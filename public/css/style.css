@@ -334,5 +334,48 @@ img {
   padding: 15px;
 }
 
+/* hero-container arrows styling */
+.hero-container {
+  display: block;
+  max-width: 100%;
+}
 
+.hero-container .hero-arrow {
+  background: #ffffff;           
+  color: var(--black);           
+  width: 2.75rem;
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  transition: background 160ms ease, transform 120ms ease;
+  border-radius: 50%;
+  box-shadow: 0 0.125rem 0.5rem rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+.hero-container .hero-arrow:hover {
+  background: #cacacd; 
+  transform: translateY(-50%) scale(1.02);
+}
+
+.hero-container .hero-arrow-left  { left: 1rem; } 
+.hero-container .hero-arrow-right { right: 1rem; }  
+
+/* Admin login button */
+.header__button .loginBtn {
+  background: var(--black);
+  color: #fff;
+  padding: 0.5rem 0.75rem;  
+  border-radius: 0.5rem;    
+  border: none;
+  font-weight: 600;
+  margin-left: 0.5rem;      
+  font-size: 1rem;
+  cursor: pointer;
+}
+.header__button .loginBtn:hover {
+  opacity: 0.95;
+}
 
