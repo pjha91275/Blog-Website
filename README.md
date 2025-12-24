@@ -1,4 +1,4 @@
-# 🌐 Blog Website – Full Stack Application
+# 🌐 Blog Management System – Full Stack Application
 
 A full-stack blog web application built using **Node.js**, **Express.js**, **MongoDB Atlas**, and **EJS**.  
 The project focuses on server-side rendering, authentication, and CRUD-based content management.
